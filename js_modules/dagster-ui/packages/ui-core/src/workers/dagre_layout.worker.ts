@@ -12,7 +12,7 @@ import {layoutOpGraph} from '../graph/layout';
  * try to remove it.
  */
 
-self.addEventListener('message', (event) => {
+self.addEventListener('message', async (event) => {
   const {data} = event;
 
   switch (data.type) {
@@ -23,7 +23,7 @@ self.addEventListener('message', (event) => {
     }
     case 'layoutAssetGraph': {
       const {graphData, opts} = data;
-      self.postMessage(layoutAssetGraph(graphData, opts));
+      self.postMessage(await layoutAssetGraph(graphData, opts));
     }
   }
 });

@@ -11,7 +11,7 @@ import {ILayoutOp, layoutOpGraph, LayoutOpGraphOptions, OpGraphLayout} from './l
 const ASYNC_LAYOUT_SOLID_COUNT = 50;
 
 // If you're working on the layout logic, set to false so hot-reloading re-computes the layout
-const CACHING_ENABLED = true;
+const CACHING_ENABLED = false;
 
 // Op Graph
 
@@ -68,8 +68,6 @@ const _assetLayoutCacheKey = (graphData: GraphData, opts: LayoutAssetGraphOption
     expandedGroups: graphData.expandedGroups,
   })}`;
 };
-
-const getFullAssetLayout = memoize(layoutAssetGraph, _assetLayoutCacheKey);
 
 export const asyncGetFullAssetLayoutIndexDB = indexedDBAsyncMemoize(
   (graphData: GraphData, opts: LayoutAssetGraphOptions) => {
@@ -187,8 +185,6 @@ export function useAssetLayout(_graphData: GraphData, expandedGroups: string[]) 
 
   const opts = React.useMemo(() => ({horizontalDAGs: true}), []);
   const cacheKey = _assetLayoutCacheKey(graphData, opts);
-  const nodeCount = Object.keys(graphData.nodes).length;
-  const runAsync = nodeCount >= ASYNC_LAYOUT_SOLID_COUNT;
 
   React.useEffect(() => {
     async function runAsyncLayout() {
@@ -202,17 +198,12 @@ export function useAssetLayout(_graphData: GraphData, expandedGroups: string[]) 
       dispatch({type: 'layout', payload: {layout, cacheKey}});
     }
 
-    if (!runAsync) {
-      const layout = getFullAssetLayout(graphData, opts);
-      dispatch({type: 'layout', payload: {layout, cacheKey}});
-    } else {
-      void runAsyncLayout();
-    }
-  }, [cacheKey, graphData, runAsync, flags, opts]);
+    void runAsyncLayout();
+  }, [cacheKey, graphData, flags, opts]);
 
   return {
     loading: state.loading || !state.layout || state.cacheKey !== cacheKey,
-    async: runAsync,
+    async: true,
     layout: state.layout as AssetGraphLayout | null,
   };
 }
