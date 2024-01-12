@@ -30,13 +30,15 @@ export const AssetTabs = (props: Props) => {
 };
 
 export const DEFAULT_ASSET_TAB_ORDER = [
-  'partitions',
-  'events',
+  'overview',
+  'launchpad',
+  'executions',
+  'automation',
   'checks',
+  'insights',
   'plots',
-  'definition',
   'lineage',
-  'auto-materialize-history',
+  'partitions',
 ];
 
 export type AssetTabConfigInput = {
@@ -67,36 +69,34 @@ export const buildAssetTabMap = (input: AssetTabConfigInput): Record<string, Ass
       id: 'checks',
       title: 'Checks',
       to: buildAssetViewParams({...params, view: 'checks'}),
-      hidden: !definition?.hasAssetChecks,
     },
-    events: {
-      id: 'events',
-      title: 'Events',
-      to: buildAssetViewParams({...params, view: 'events', partition: undefined}),
+    executions: {
+      id: 'executions',
+      title: 'Executions',
+      to: buildAssetViewParams({...params, view: 'executions', partition: undefined}),
+    },
+    overview: {
+      id: 'overview',
+      title: 'Overview',
+      to: buildAssetViewParams({...params, view: 'overview'}),
+      disabled: !definition,
     },
     plots: {
       id: 'plots',
-      title: 'Plots',
+      title: 'Insights',
       to: buildAssetViewParams({...params, view: 'plots'}),
     },
-    definition: {
-      id: 'definition',
-      title: 'Definition',
-      to: buildAssetViewParams({...params, view: 'definition'}),
+    'automation': {
+      id: 'automation',
+      title: 'Automation',
+      to: buildAssetViewParams({...params, view: 'automation'}),
       disabled: !definition,
     },
-    lineage: {
-      id: 'lineage',
-      title: 'Lineage',
-      to: buildAssetViewParams({...params, view: 'lineage'}),
+    'launchpad': {
+      id: 'launchpad',
+      title: 'Launchpad',
+      to: buildAssetViewParams({...params, view: 'launchpad'}),
       disabled: !definition,
-    },
-    'auto-materialize-history': {
-      id: 'auto-materialize-history',
-      title: 'Auto-materialize history',
-      to: buildAssetViewParams({...params, view: 'auto-materialize-history'}),
-      disabled: !definition,
-      hidden: !definition?.autoMaterializePolicy,
     },
   };
 };

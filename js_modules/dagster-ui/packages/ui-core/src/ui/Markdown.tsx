@@ -1,4 +1,4 @@
-import {FontFamily, colorTextLight} from '@dagster-io/ui-components';
+import {FontFamily, colorBackgroundLight, colorKeylineDefault, colorTextLight} from '@dagster-io/ui-components';
 import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
@@ -106,5 +106,12 @@ const Container = styled.div`
   &&& table tr th:last-child,
   &&& table tr td:last-child {
     padding-right: 0;
+  }
+
+  &&& pre {
+    background: ${colorBackgroundLight()};
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid ${colorKeylineDefault()};
   }
 `;
